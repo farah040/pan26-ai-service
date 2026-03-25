@@ -90,6 +90,32 @@ def search(workspace_id, query_embedding, top_k=1000) -> list[tuple[str, float]]
     return [(hit.payload["doc_id"], hit.score) for hit in results]
 
 
+def is_document_indexed(workspace_id, doc_id):
+    """
+    Returns True if this document already has chunks stored in Qdrant
+    Used to avoid re-encoding and re-upserting the same file twice
+    """
+    client = get_client()
+
+    collections = [c.name for c in client.get_collections().collections]
+    if workspace_id not in collections:
+        return False
+
+    results, _ = client.scroll(
+        collection_name=workspace_id,
+        scroll_filter=Filter(
+            must=[
+                FieldCondition(
+                    key="doc_id",
+                    match=MatchValue(value=doc_id)
+                )
+            ]
+        ),
+        limit=1
+    )
+    return len(results) > 0
+
+
 def delete_document(workspace_id, doc_id):
     """
     Deletes ALL chunks belonging to a specific document.
