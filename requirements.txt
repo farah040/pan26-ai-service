@@ -5,3 +5,4 @@ fastapi
 uvicorn
 pdfplumber
 python-docx
+python-multipart

@@ -80,12 +80,12 @@ def search(workspace_id, query_embedding, top_k=1000) -> list[tuple[str, float]]
     """
     client = get_client()
 
-    results = client.search(
+    results = client.query_points(
         collection_name=workspace_id,
-        query_vector=query_embedding,
+        query=query_embedding,
         limit=top_k,
         with_payload=True # include the payload (doc_id, chunk_text) in results
-    )
+    ).points
 
     return [(hit.payload["doc_id"], hit.score) for hit in results]
 
