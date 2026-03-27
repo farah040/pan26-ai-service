@@ -35,7 +35,7 @@ def retrieve(
     workspace_id,
     query_text,
     top_k: int | None = None,
-    aggregation = "max",
+    aggregation = "mean",
     chunk_pool = 100
 ) -> list[tuple[str, float]]:
     """

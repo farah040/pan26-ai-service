@@ -5,7 +5,7 @@ from pipeline.chunker import chunk_document
 from pipeline.encoder import encode_chunks
 from qdrant_store import upsert_chunks, is_document_indexed
 from retriever import retrieve
-
+ 
 app = FastAPI()
 
 
