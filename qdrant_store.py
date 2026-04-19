@@ -1,4 +1,5 @@
 from qdrant_client import QdrantClient
+import os
 from qdrant_client.models import (
     Distance,       # enum: COSINE, DOT, EUCLID
     VectorParams,   # config for vector dimensions + distance metric
@@ -9,19 +10,17 @@ from qdrant_client.models import (
 )
 import uuid  # to generate unique IDs for each chunk
 
-QDRANT_URL = "http://localhost:6333"
-VECTOR_DIM = 768  # e5-base-v2 produces 768-dimensional vectors
+# new
+QDRANT_URL = os.getenv("QDRANT_URL", "http://localhost:6333")
+QDRANT_API_KEY = os.getenv("QDRANT_API_KEY", None)
+VECTOR_DIM = 768
 
-_client = None # no connection yet
+_client = None
 
 def get_client():
-    """
-     first time it's called -> connection created 
-     every call after that -> returns the same already-open connection
-    """
     global _client
     if _client is None:
-        _client = QdrantClient(url=QDRANT_URL)
+        _client = QdrantClient(url=QDRANT_URL, api_key=QDRANT_API_KEY)
     return _client
 
 def ensure_collection(workspace_id: str):
