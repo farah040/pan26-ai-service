@@ -6,3 +6,4 @@ uvicorn
 pdfplumber
 python-docx
 python-multipart
+requests
